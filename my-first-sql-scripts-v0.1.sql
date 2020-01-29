@@ -1,0 +1,2 @@
+select concat(firstname,' ',lastname)as Instructor,YearsExperience,istenured,c.id as 'Course Code',concat(subject,' ',section)as class 
+from Instructor i join class c on i.id = c.instructorid where i.istenured = 1 order by i.lastname
