@@ -1,0 +1,2 @@
+exec SaleRangeByCity @lowsales=40000,@highsales=70000;
+/*must follow same order as declared, use @'abc' to change one of the parameters with out changing ones before it. parameters can be alot more descriptive.*/
