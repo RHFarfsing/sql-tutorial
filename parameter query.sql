@@ -10,3 +10,4 @@ BEGIN
 		select * from customers where city=@city and sales between @lowsales and @highsales;
 
 END
+/* create procedure declare varchar(n),int,decimal(x,y) as :: x=amount of numbers in the int. y=amount of numbers after the decimal point.*/
