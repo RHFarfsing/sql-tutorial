@@ -48,5 +48,53 @@ values ('LOV','Lowes','432 Victory Lane','Anthem','OH','45069','513-342-4938','V
 insert into Vendors(code,Name,Address,City,State,Zip,Phone,Email)
 values ('HDV','Home Depot','230 Victory Lane','Anthem','OH','45069','513-764-9632','Vendor@homedepot.com')
 go
-select * from Vendors
+
+create table Products(
+	Id int not null primary key identity(1,1),
+	PartNbr nvarchar(30) not null unique,
+	Name nvarchar(30) not null,
+	Price decimal(11,2) not null,
+	Unit nvarchar(30) not null,
+	PhotoPath nvarchar(255),
+	VenderId int not null foreign key references Vendors(Id)
+);
 go
+insert into Products(PartNbr,Name,Price,Unit,VenderId)
+values ('Eggs','Eggs',15.50,'Each',(select id from Vendors where code='KRV'))
+insert into Products(PartNbr,Name,Price,Unit,VenderId)
+values ('BeefS','Beef Sticks',20.00,'Each',(select id from Vendors where code='AMV'))
+insert into Products(PartNbr,Name,Price,Unit,VenderId)
+values ('Porks','Pork Sticks',20.00,'Each',2)
+insert into Products(PartNbr,Name,Price,Unit,VenderId)
+values ('Drill','Drill',150.00,'Each',3)
+go
+create table Requests(
+	Id int Primary key identity(1,1),
+	Description nvarchar(80) not null,
+	Justification nvarchar(80) not null,
+	RejectionReason nvarchar(80) null,
+	DeliveryMode nvarchar(20) not null default'Pickup',
+	Status nvarchar(10) not null default'NEW',
+	Total decimal (11,2) not null default 0,
+	UserId int not null foreign key references TheUsers(id)
+);
+go
+insert into requests (Description,Justification,userid)
+values('1st Request','None Needed',(select id from TheUsers where username='us'));
+insert into requests (Description,Justification,userid)
+values('2nd Request','None Needed',(select id from TheUsers where username='sa'));
+insert into requests (Description,Justification,userid)
+values('3rd Request','None Needed',(select id from theusers where username='rv'));
+insert into requests (Description,Justification,userid)
+values('4th Request','None Needed',(select id from theusers where username='us'))
+go
+create table RequestLines(
+	Id int primary key identity (1,1),
+	RequestId int foreign key references Requests(id),
+	ProductId int foreign key references Products(id),
+	Quantity int default 1
+);
+go
+insert into RequestLines(RequestId,ProductId,Quantity)
+values((select id from Requests where description='1st Request'),(select id from products where PartNbr='Eggs'),5)
+insert into requestlines(
