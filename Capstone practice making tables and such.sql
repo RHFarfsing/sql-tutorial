@@ -40,13 +40,13 @@ create table Vendors(
 );
 go
 insert into Vendors(code,Name,Address,City,State,Zip,Phone,Email)
-values ('AMV','Amazom','111 Victory Lane','Anthem','OH','45069','513-345-2313','Vendor@amazon.com')
+values ('AMV','Amazom','111 Victory Lane','Anthem','OH','45069','513-345-2313','Vendor@amazon.com');
 insert into Vendors(code,Name,Address,City,State,Zip,Phone,Email)
-values ('KRV','Kroger','134 Victory Lane','Anthem','OH','45069','513-984-3829','Vendor@kroger.com')
+values ('KRV','Kroger','134 Victory Lane','Anthem','OH','45069','513-984-3829','Vendor@kroger.com');
 insert into Vendors(code,Name,Address,City,State,Zip,Phone,Email)
-values ('LOV','Lowes','432 Victory Lane','Anthem','OH','45069','513-342-4938','Vendor@lowes.com')
+values ('LOV','Lowes','432 Victory Lane','Anthem','OH','45069','513-342-4938','Vendor@lowes.com');
 insert into Vendors(code,Name,Address,City,State,Zip,Phone,Email)
-values ('HDV','Home Depot','230 Victory Lane','Anthem','OH','45069','513-764-9632','Vendor@homedepot.com')
+values ('HDV','Home Depot','230 Victory Lane','Anthem','OH','45069','513-764-9632','Vendor@homedepot.com');
 go
 
 create table Products(
@@ -60,13 +60,13 @@ create table Products(
 );
 go
 insert into Products(PartNbr,Name,Price,Unit,VenderId)
-values ('Eggs','Eggs',15.50,'Each',(select id from Vendors where code='KRV'))
+values ('Eggs','Eggs',15.50,'Each',(select id from Vendors where code='KRV'));
 insert into Products(PartNbr,Name,Price,Unit,VenderId)
-values ('BeefS','Beef Sticks',20.00,'Each',(select id from Vendors where code='AMV'))
+values ('BeefS','Beef Sticks',20.00,'Each',(select id from Vendors where code='AMV'));
 insert into Products(PartNbr,Name,Price,Unit,VenderId)
-values ('Porks','Pork Sticks',20.00,'Each',2)
+values ('PorkS','Pork Sticks',20.00,'Each',(select id from Vendors where code='KRV'));
 insert into Products(PartNbr,Name,Price,Unit,VenderId)
-values ('Drill','Drill',150.00,'Each',3)
+values ('Drill','Drill',150.00,'Each',(select id from Vendors where code='LOV'))
 go
 create table Requests(
 	Id int Primary key identity(1,1),
@@ -86,7 +86,7 @@ values('2nd Request','None Needed',(select id from TheUsers where username='sa')
 insert into requests (Description,Justification,userid)
 values('3rd Request','None Needed',(select id from theusers where username='rv'));
 insert into requests (Description,Justification,userid)
-values('4th Request','None Needed',(select id from theusers where username='us'))
+values('4th Request','None Needed',(select id from theusers where username='us'));
 go
 create table RequestLines(
 	Id int primary key identity (1,1),
@@ -97,4 +97,10 @@ create table RequestLines(
 go
 insert into RequestLines(RequestId,ProductId,Quantity)
 values((select id from Requests where description='1st Request'),(select id from products where PartNbr='Eggs'),5)
-insert into requestlines(
+insert into requestlines(RequestId,ProductId,Quantity)
+values((select id from Requests where description='2nd Request'),(select id from Products where PartNbr='BeefS'),2)
+insert into requestlines(RequestId,ProductId,Quantity)
+values((select id from Requests where description='3rd Request'),(select id from Products where PartNbr='Drill'),1)
+insert into requestlines(RequestId,ProductId,Quantity)
+values((select id from Requests where description='4th Request'),(select id from Products where PartNbr='PorkS'),4)
+go
